@@ -16,6 +16,7 @@ public class FrmLogin extends javax.swing.JFrame {
         initComponents();
         caracterOculto = pwdClave.getEchoChar();
         aplicarEstilos();
+        lblAyuda.setText("");
         getRootPane().setDefaultButton(btnIngresar);
         setLocationRelativeTo(null);
         txtUsuario.requestFocusInWindow();
@@ -29,7 +30,7 @@ public class FrmLogin extends javax.swing.JFrame {
         lblUsuario.setForeground(EstilosUI.TEXTO);
         lblClave.setForeground(EstilosUI.TEXTO);
         lblEstado.setForeground(EstilosUI.ERROR);
-        lblAyuda.setForeground(EstilosUI.TEXTO_SUAVE);
+        //lblAyuda.setForeground(EstilosUI.TEXTO_SUAVE);
         EstilosUI.configurarCampo(txtUsuario);
         EstilosUI.configurarCampo(pwdClave);
         EstilosUI.configurarBotonPrimario(btnIngresar);
@@ -212,8 +213,8 @@ public class FrmLogin extends javax.swing.JFrame {
     private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblUsuario;
-    private com.gestionorganizacional.util.PanelDegradado pnlMarca;
     private javax.swing.JPanel pnlFormulario;
+    private com.gestionorganizacional.util.PanelDegradado pnlMarca;
     private javax.swing.JPasswordField pwdClave;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
