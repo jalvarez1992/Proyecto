@@ -1,8 +1,6 @@
 # Sistema de Gestión Organizacional
 
-Aplicación de escritorio desarrollada con Java 17, Swing, JDBC y MySQL. El proyecto
-usa la estructura **Java with Ant > Java Application** de Apache NetBeans y puede
-abrirse directamente con **File > Open Project**.
+Aplicación de escritorio desarrollada con Java 17, Swing, JDBC y MySQL. Incluye una interfaz moderna con navegación lateral, panel de indicadores, iconos vectoriales, módulo de reportería y exportación a PDF/CSV. El proyecto usa la estructura **Java with Ant > Java Application** de Apache NetBeans y puede abrirse directamente con **File > Open Project**.
 
 ## Requisitos
 
@@ -64,7 +62,9 @@ Todos los formularios tienen su archivo `.java` y `.form` correspondiente:
 
 - `FrmSplash`: pantalla de carga e inicialización.
 - `FrmLogin`: acceso seguro con validación y opción de mostrar contraseña.
-- `FrmPrincipal`: ventana MDI (`JFrame`, `JDesktopPane` y menús).
+- `FrmPrincipal`: ventana MDI moderna con navegación lateral y `JDesktopPane`.
+- `FrmDashboard`: panel de indicadores y accesos rápidos.
+- `FrmReportes`: centro de reportería, filtros y exportación PDF/CSV.
 - `FrmPais`: CRUD de países.
 - `FrmDepartamento`: CRUD de departamentos y relación con país.
 - `FrmCargo`: CRUD de cargos y rangos salariales.
@@ -73,19 +73,30 @@ Todos los formularios tienen su archivo `.java` y `.form` correspondiente:
 - `FrmAsignacion`: asignación de empleados a proyectos.
 
 Para editar un formulario visualmente, ábralo desde **Source Packages** y seleccione
-la pestaña **Design**. Los diseños usan administradores estándar compatibles con
-Matisse (`BorderLayout`, `GridLayout` y `FlowLayout`), sin posiciones absolutas.
+la pestaña **Design**. Los diseños usan componentes Swing estándar y administradores compatibles con Matisse (`BorderLayout`, `GridLayout` y `FlowLayout`). No se insertan componentes personalizados dentro de los archivos `.form`; los colores, iconos vectoriales y bordes modernos se aplican después de `initComponents()`. Esto permite abrir la pestaña **Design** aun cuando el proyecto se haya limpiado o todavía no se hayan compilado clases auxiliares.
+
+
+## Interfaz y reportería
+
+- Navegación lateral con iconos vectoriales incluidos en el código.
+- Panel inicial con empleados activos, departamentos, proyectos y asignaciones.
+- Estilos uniformes para campos, botones, tablas, formularios y estados.
+- Reportes de empleados, proyectos, estructura organizacional y asignaciones.
+- Filtro de resultados dentro del centro de reportería.
+- Exportación directa a PDF y CSV desde el módulo de reportes.
+- Exportación de los datos visibles desde cada mantenimiento CRUD.
+- PDF generado sin dependencias adicionales y CSV UTF-8 con BOM para conservar acentos.
 
 ## Arquitectura
 
 ```text
 com.gestionorganizacional
 ├── modelo       Entidades y agregado Empresa
-├── dao          Persistencia JDBC y consultas preparadas
+├── dao          Persistencia JDBC, consultas preparadas y consultas de reportería
 ├── controlador  Validaciones y coordinación de casos de uso
 ├── vista        Formularios Swing MDI y archivos .form
 ├── conexion     Configuración, conexión e inicialización de MySQL
-├── util         Mensajes, conversión y validaciones reutilizables
+├── util         Estilos, iconos, mensajes, validaciones y exportadores PDF/CSV
 └── principal    Punto de entrada de la aplicación
 ```
 

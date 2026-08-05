@@ -18,6 +18,13 @@ public class FrmAsignacion extends javax.swing.JInternalFrame {
         initComponents();
         tblRegistros.setModel(modelo);
         tblRegistros.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        EstilosUI.aplicarFormularioMantenimiento(this, pnlFormulario, pnlAcciones, tblRegistros, scrRegistros);
+        pnlCentro.setOpaque(false);
+        pnlCentro.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnlExportacion.setOpaque(false);
+        EstilosUI.aplicarControles(pnlExportacion);
+        EstilosUI.configurarBoton(btnPdf, IconosUI.Tipo.PDF, EstilosUI.VarianteBoton.SECUNDARIO);
+        EstilosUI.configurarBoton(btnCsv, IconosUI.Tipo.CSV, EstilosUI.VarianteBoton.SECUNDARIO);
         try {
             for(Empleado e:new EmpleadoController().listar()) cmbEmpleado.addItem(e);
         for(Proyecto p:new ProyectoController().listar()) cmbProyecto.addItem(p);
@@ -110,9 +117,16 @@ public class FrmAsignacion extends javax.swing.JInternalFrame {
     private void initComponents() {
         pnlFormulario = new javax.swing.JPanel();
         lblId = new javax.swing.JLabel("ID:"); txtId = new javax.swing.JTextField(); txtId.setEditable(false); lblEmpleado = new javax.swing.JLabel("Empleado:"); cmbEmpleado = new javax.swing.JComboBox<>(); lblProyecto = new javax.swing.JLabel("Proyecto:"); cmbProyecto = new javax.swing.JComboBox<>(); lblFechaAsignacion = new javax.swing.JLabel("Fecha asignación:"); txtFechaAsignacion = new javax.swing.JTextField(); lblHorasAsignadas = new javax.swing.JLabel("Horas asignadas:"); spnHorasAsignadas = new javax.swing.JSpinner(); lblRol = new javax.swing.JLabel("Rol:"); txtRol = new javax.swing.JTextField();
+        pnlCentro = new javax.swing.JPanel();
+        pnlExportacion = new javax.swing.JPanel();
+        lblExportar = new javax.swing.JLabel("Exportar datos:");
+        btnPdf = new javax.swing.JButton("Exportar PDF");
+        btnCsv = new javax.swing.JButton("Exportar CSV");
         scrRegistros = new javax.swing.JScrollPane();
         tblRegistros = new javax.swing.JTable();
         pnlAcciones = new javax.swing.JPanel();
+        pnlCrud = new javax.swing.JPanel();
+        pnlBusqueda = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton("Nuevo");
         btnGuardar = new javax.swing.JButton("Guardar");
         btnModificar = new javax.swing.JButton("Modificar");
@@ -139,18 +153,41 @@ public class FrmAsignacion extends javax.swing.JInternalFrame {
             @Override public void mouseClicked(java.awt.event.MouseEvent evt) { tblRegistrosMouseClicked(evt); }
         });
         scrRegistros.setViewportView(tblRegistros);
-        getContentPane().add(scrRegistros, java.awt.BorderLayout.CENTER);
 
-        pnlAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 6, 6));
+        pnlCentro.setLayout(new java.awt.BorderLayout(0, 8));
+        pnlExportacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 0));
+        pnlExportacion.add(lblExportar);
+        btnPdf.addActionListener(evt -> btnPdfActionPerformed(evt));
+        pnlExportacion.add(btnPdf);
+        btnCsv.addActionListener(evt -> btnCsvActionPerformed(evt));
+        pnlExportacion.add(btnCsv);
+        pnlCentro.add(pnlExportacion, java.awt.BorderLayout.NORTH);
+        pnlCentro.add(scrRegistros, java.awt.BorderLayout.CENTER);
+        getContentPane().add(pnlCentro, java.awt.BorderLayout.CENTER);
+
+        pnlAcciones.setLayout(new java.awt.BorderLayout(10, 0));
+        pnlCrud.setOpaque(false);
+        pnlCrud.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 6, 0));
         btnNuevo.addActionListener(evt -> btnNuevoActionPerformed(evt));
         btnGuardar.addActionListener(evt -> btnGuardarActionPerformed(evt));
         btnModificar.addActionListener(evt -> btnModificarActionPerformed(evt));
         btnEliminar.addActionListener(evt -> btnEliminarActionPerformed(evt));
         btnCancelar.addActionListener(evt -> btnCancelarActionPerformed(evt));
+        pnlCrud.add(btnNuevo);
+        pnlCrud.add(btnGuardar);
+        pnlCrud.add(btnModificar);
+        pnlCrud.add(btnEliminar);
+        pnlCrud.add(btnCancelar);
+        pnlAcciones.add(pnlCrud, java.awt.BorderLayout.WEST);
+
+        pnlBusqueda.setOpaque(false);
+        pnlBusqueda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 6, 0));
+        pnlBusqueda.add(lblBuscar);
+        txtBuscar.addActionListener(evt -> btnBuscarActionPerformed(evt));
+        pnlBusqueda.add(txtBuscar);
         btnBuscar.addActionListener(evt -> btnBuscarActionPerformed(evt));
-        pnlAcciones.add(btnNuevo); pnlAcciones.add(btnGuardar); pnlAcciones.add(btnModificar);
-        pnlAcciones.add(btnEliminar); pnlAcciones.add(btnCancelar); pnlAcciones.add(lblBuscar);
-        pnlAcciones.add(txtBuscar); pnlAcciones.add(btnBuscar);
+        pnlBusqueda.add(btnBuscar);
+        pnlAcciones.add(pnlBusqueda, java.awt.BorderLayout.EAST);
         getContentPane().add(pnlAcciones, java.awt.BorderLayout.SOUTH);
         setSize(980, 620);
     }// </editor-fold>//GEN-END:initComponents
@@ -173,11 +210,19 @@ public class FrmAsignacion extends javax.swing.JInternalFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         buscar();
     }//GEN-LAST:event_btnBuscarActionPerformed
+    private void btnPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfActionPerformed
+        ExportacionUtil.exportarPdf(this, tblRegistros, getTitle());
+    }//GEN-LAST:event_btnPdfActionPerformed
+    private void btnCsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCsvActionPerformed
+        ExportacionUtil.exportarCsv(this, tblRegistros, getTitle());
+    }//GEN-LAST:event_btnCsvActionPerformed
     private void tblRegistrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRegistrosMouseClicked
         seleccionarFila();
     }//GEN-LAST:event_tblRegistrosMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCsv;
+    private javax.swing.JButton btnPdf;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
@@ -186,7 +231,12 @@ public class FrmAsignacion extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JLabel lblId; private javax.swing.JTextField txtId; private javax.swing.JLabel lblEmpleado; private javax.swing.JComboBox<Empleado> cmbEmpleado; private javax.swing.JLabel lblProyecto; private javax.swing.JComboBox<Proyecto> cmbProyecto; private javax.swing.JLabel lblFechaAsignacion; private javax.swing.JTextField txtFechaAsignacion; private javax.swing.JLabel lblHorasAsignadas; private javax.swing.JSpinner spnHorasAsignadas; private javax.swing.JLabel lblRol; private javax.swing.JTextField txtRol;
     private javax.swing.JLabel lblBuscar;
+    private javax.swing.JLabel lblExportar;
     private javax.swing.JPanel pnlAcciones;
+    private javax.swing.JPanel pnlBusqueda;
+    private javax.swing.JPanel pnlCentro;
+    private javax.swing.JPanel pnlCrud;
+    private javax.swing.JPanel pnlExportacion;
     private javax.swing.JPanel pnlFormulario;
     private javax.swing.JScrollPane scrRegistros;
     private javax.swing.JTable tblRegistros;

@@ -11,6 +11,7 @@ public class FrmSplash extends javax.swing.JDialog {
     public FrmSplash() {
         super((java.awt.Frame) null, false);
         initComponents();
+        EstilosUI.configurarPanelGradiente(pnlFondo);
         setLocationRelativeTo(null);
     }
 
@@ -73,7 +74,7 @@ public class FrmSplash extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        pnlFondo = new com.gestionorganizacional.util.PanelDegradado();
+        pnlFondo = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
         lblSubtitulo = new javax.swing.JLabel();
@@ -131,7 +132,7 @@ public class FrmSplash extends javax.swing.JDialog {
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTitulo;
-    private com.gestionorganizacional.util.PanelDegradado pnlFondo;
+    private javax.swing.JPanel pnlFondo;
     private javax.swing.JProgressBar prgCarga;
     // End of variables declaration//GEN-END:variables
 }
